@@ -78,10 +78,10 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-8 px-6 mt-12">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
-            <p>&copy; 2024 Equipo de Supervisión. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Equipo de Supervisión. Todos los derechos reservados.</p>
             <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" class="hover:text-slate-800 transition-colors">Manual de Usuario</a>
-                <a href="#" class="hover:text-slate-800 transition-colors">Soporte Técnico</a>
+                <a href="https://github.com/registrodeinformesdiarios-svg/registrodeinformesdiarios-svg.github.io/blob/main/Manual%20de%20usuario.pdf" class="hover:text-slate-800 transition-colors">Manual de Usuario</a>
+                <a href="https://github.com/registrodeinformesdiarios-svg/registrodeinformesdiarios-svg.github.io/blob/main/Manual%20de%20usuario.pdf" class="hover:text-slate-800 transition-colors">Soporte Técnico</a>
             </div>
         </div>
     </footer>
@@ -93,37 +93,48 @@
                 title: '1. PS Numu',
                 form: '#',
                 watermark: '#',
-                reports: '#'
+                reports: '#',
+                curveS: '#'
             },
             'tecales': {
                 title: '2. PS Los Tecales',
                 form: 'https://docs.google.com/forms/d/e/1FAIpQLScnnyrYdjsp68DlC6RQa5v2ovD3as3yGlasiKuPUOb_ogXuLQ/viewform',
                 watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/',
-                reports: '#'
+                reports: '#',
+                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS/',
+                kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform'
             },
             'canas': {
                 title: '3. PS Cañas',
                 form: '#',
                 watermark: '#',
-                reports: '#'
+                reports: '#',
+                curveS: '#',
+                kilometraje: '#'
             },
             'inolasa': {
                 title: '4. Inolasa',
                 form: '#',
                 watermark: '#',
-                reports: '#'
+                reports: '#',
+                curveS: '#',
+                kilometraje: '#'
             },
             'boston': {
                 title: '5. Boston Sc.',
                 form: '#',
                 watermark: '#',
-                reports: '#'
+                reports: '#',
+                curveS: '#',
+                kilometraje: '#'
             },
             'colorado': {
                 title: '6. Colorado',
                 form: '#',
                 watermark: '#',
-                reports: '#'
+                reports: '#',
+                curveS: '#',
+                kilometraje: '#'
             }
         };
 
@@ -170,6 +181,30 @@
                     <p class="text-slate-600 mb-8 flex-grow">Generador automático de informes diarios técnicos y operativos para ${project.title}.</p>
                     <a href="${project.reports}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-amber-600 hover:bg-amber-700 transition-colors">
                         Generar Informe <i data-lucide="file-plus" class="ml-2 w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Curva S -->
+                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm">
+                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="trending-up" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Curva S</h2>
+                    <p class="text-slate-600 mb-8 flex-grow">Sistema de seguimiento de progreso de proyecto según cronograma para ${project.title}.</p>
+                    <a href="${project.curveS}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                        Abrir sistema de seguimiento <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Kilometraje -->
+                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm">
+                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-600 rounded-xl">
+                        <i data-lucide="car" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Kilometraje</h2>
+                    <p class="text-slate-600 mb-8 flex-grow">Formulario para ingresar kilometraje en proyecto ${project.title}.</p>
+                    <a href="${project.kilometraje}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
+                        Registrar cierre de día <i data-lucide="plus-circle" class="ml-2 w-4 h-4"></i>
                     </a>
                 </div>
             `;
