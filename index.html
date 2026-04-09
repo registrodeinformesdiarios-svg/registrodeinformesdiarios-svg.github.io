@@ -94,7 +94,9 @@
                 form: '#',
                 watermark: '#',
                 reports: '#',
-                curveS: '#'
+                curveS: '#',
+                kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
             },
             'tecales': {
                 title: '2. PS Los Tecales',
@@ -102,7 +104,8 @@
                 watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/',
                 reports: 'https://registrodeinformesdiarios-svg.github.io/ReportGenerator/',
                 curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS/',
-                kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform'
+                kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
             },
             'canas': {
                 title: '3. PS Cañas',
@@ -110,7 +113,8 @@
                 watermark: '#',
                 reports: '#',
                 curveS: '#',
-                kilometraje: '#'
+                kilometraje: '#',
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
             },
             'inolasa': {
                 title: '4. Inolasa',
@@ -118,7 +122,8 @@
                 watermark: '#',
                 reports: '#',
                 curveS: '#',
-                kilometraje: '#'
+                kilometraje: '#',
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
             },
             'boston': {
                 title: '5. Boston Sc.',
@@ -126,7 +131,8 @@
                 watermark: '#',
                 reports: '#',
                 curveS: '#',
-                kilometraje: '#'
+                kilometraje: '#',
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
             },
             'colorado': {
                 title: '6. Colorado',
@@ -134,7 +140,8 @@
                 watermark: '#',
                 reports: '#',
                 curveS: '#',
-                kilometraje: '#'
+                kilometraje: '#',
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
             }
         };
 
@@ -206,6 +213,19 @@
                     <a href="${project.kilometraje}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
                         Registrar cierre de día <i data-lucide="plus-circle" class="ml-2 w-4 h-4"></i>
                     </a>
+                </div>
+
+                <!-- Viaticos -->
+                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm">
+                      <div class="mb-6 flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <i data-lucide="wallet" class="w-8 h-8"></i>
+                      </div>
+                      <h2 class="text-2xl font-bold text-slate-800 mb-3">Viáticos</h2>
+                      <p class="text-slate-600 mb-8 flex-grow">Formulario para ingresar viáticos en proyecto ${project.title}.</p>
+                      <a href="${project.viaticos}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
+                        Registrar gastos
+                        <i data-lucide="plus-circle" class="ml-2 w-4 h-4"></i>
+                      </a>
                 </div>
             `;
             
