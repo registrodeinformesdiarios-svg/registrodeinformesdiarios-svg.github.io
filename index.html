@@ -96,7 +96,8 @@
                 reports: '#',
                 curveS: '#',
                 kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
+                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/'
             },
             'tecales': {
                 title: '2. PS Los Tecales',
@@ -105,7 +106,8 @@
                 reports: 'https://registrodeinformesdiarios-svg.github.io/ReportGenerator/',
                 curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS/',
                 kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
+                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/'
             },
             'canas': {
                 title: '3. PS Cañas',
@@ -114,7 +116,8 @@
                 reports: '#',
                 curveS: '#',
                 kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
+                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/'
             },
             'inolasa': {
                 title: '4. Inolasa',
@@ -123,7 +126,8 @@
                 reports: '#',
                 curveS: '#',
                 kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
+                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/'
             },
             'boston': {
                 title: '5. Boston Sc.',
@@ -132,7 +136,8 @@
                 reports: '#',
                 curveS: '#',
                 kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
+                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/'
             },
             'colorado': {
                 title: '6. Colorado',
@@ -141,7 +146,8 @@
                 reports: '#',
                 curveS: '#',
                 kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/'
+                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
+                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/'
             }
         };
 
@@ -227,6 +233,20 @@
                         <i data-lucide="plus-circle" class="ml-2 w-4 h-4"></i>
                       </a>
                 </div>
+
+                <!-- Vizualizador3D -->
+                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
+                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="box" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Visualizador 3D</h2>   
+                    <p class="text-slate-600 mb-8 flex-grow">
+                        Explora e interactúa con el modelo tridimensional detallado de **${project.title}** en tiempo real.
+                    </p>   
+                    <a href="${project.visualizador3D}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                        Explorar Modelo <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+                    </a>
+                </div>              
             `;
             
             lucide.createIcons();
