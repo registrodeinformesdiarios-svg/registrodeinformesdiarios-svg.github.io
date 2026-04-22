@@ -98,7 +98,8 @@
                 kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
                 viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
                 visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/'
+                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/',
+                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/'
             },
             'tecales': {
                 title: '2. PS Los Tecales',
@@ -109,7 +110,8 @@
                 kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
                 viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
                 visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/'
+                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/',
+                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/'
             },
             'canas': {
                 title: '3. PS Cañas',
@@ -120,7 +122,8 @@
                 kilometraje: '#',
                 viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
                 visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/'
+                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/',
+                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/'
             },
             'inolasa': {
                 title: '4. Inolasa',
@@ -131,7 +134,8 @@
                 kilometraje: '#',
                 viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
                 visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/'
+                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/',
+                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/'
             },
             'boston': {
                 title: '5. Boston Sc.',
@@ -142,7 +146,8 @@
                 kilometraje: '#',
                 viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
                 visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/'
+                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/',
+                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/'
             },
             'colorado': {
                 title: '6. Colorado',
@@ -153,7 +158,8 @@
                 kilometraje: '#',
                 viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
                 visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/'
+                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/',
+                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/'
             }
         };
 
@@ -247,7 +253,7 @@
                     </div>
                     <h2 class="text-2xl font-bold text-slate-800 mb-3">Visualizador 3D</h2>   
                     <p class="text-slate-600 mb-8 flex-grow">
-                        Explora e interactúa con el modelo tridimensional detallado de **${project.title}** en tiempo real.
+                        Explora e interactúa con el modelo tridimensional detallado de ${project.title} en tiempo real.
                     </p>   
                     <a href="${project.visualizador3D}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
                         Explorar Modelo <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
@@ -261,10 +267,24 @@
                     </div>
                     <h2 class="text-2xl font-bold text-slate-800 mb-3">Visualizador de Fotos</h2>   
                     <p class="text-slate-600 mb-8 flex-grow">
-                        Explora la galería completa de imágenes y fotografías detalladas de **${project.title}** en alta resolución.
+                        Explora la galería completa de imágenes y fotografías detalladas de ${project.title} en alta resolución.
                     </p>   
                     <a href="${project.visualizadorFotos}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
                         Ver Galería <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Generador de presentaciones -->
+                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
+                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="presentation" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Generador de presentaciones</h2>   
+                    <p class="text-slate-600 mb-8 flex-grow">
+                        Explora automaticamente la galería completa de imágenes y fotografías para generar presentaciones de forma automatizada para ${project.title}.
+                    </p>   
+                    <a href="${project.generadorPresentaciones}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                        Comenzar Generación <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
                     </a>
                 </div>
             `;
