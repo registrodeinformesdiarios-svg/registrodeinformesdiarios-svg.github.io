@@ -4,316 +4,401 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Herramientas | Equipo de Supervisión</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons para los iconos descriptivos -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; min-height:100vh; display:flex; flex-direction:column; }
 
-        .tool-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .gradient-bg {
+        header {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 52px 24px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,.18);
+        }
+        header h1 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -.02em; margin-bottom: 12px; }
+        header p { font-size: clamp(.95rem, 1.5vw, 1.15rem); color: #94a3b8; font-weight: 300; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+        nav {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        nav::-webkit-scrollbar { display: none; }
+        .tab-list { display: flex; max-width: 1100px; margin: 0 auto; padding: 0 28px; white-space: nowrap; }
+        .tab-btn { font-size: .875rem; font-weight: 500; color: #64748b; padding: 16px 18px; border: none; border-bottom: 3px solid transparent; background: none; cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap; }
+        .tab-btn:hover { color: #1e40af; }
+        .tab-active { color: #1e40af !important; border-bottom-color: #3b82f6 !important; font-weight: 700; }
+
+        main { flex: 1; padding: 40px 28px 48px; max-width: 1100px; width: 100%; margin: 0 auto; }
+        #project-title { font-size: 1.75rem; font-weight: 700; color: #1e293b; margin-bottom: 24px; }
+
+        /* ── Favorites carousel ── */
+        .fav-section { margin-bottom: 32px; }
+        .fav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .fav-title {
+            font-size: .7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .1em; color: #94a3b8;
+            display: flex; align-items: center; gap: 7px;
+        }
+        .fav-title svg { width: 14px; height: 14px; color: #f59e0b; fill: #f59e0b; }
+        .fav-edit-btn { display: none; }
+
+        .fav-track-wrap { overflow: hidden; position: relative; }
+        .fav-track {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+        .fav-track::-webkit-scrollbar { height: 5px; }
+        .fav-track::-webkit-scrollbar-track { background: transparent; }
+        .fav-track::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .fav-card {
+            flex: 0 0 200px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px 18px 16px;
+            display: flex;
+            flex-direction: column;
+            transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .25s;
+            position: relative;
+            text-decoration: none;
+        }
+        .fav-card:not(.fav-editing):hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -6px rgba(0,0,0,.1);
         }
 
-        .tab-active {
-            border-bottom: 3px solid #3b82f6;
-            color: #1e40af;
-            font-weight: 700;
+        .fav-remove-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: #ef4444; color: #fff; border: none; cursor: pointer;
+            display: none; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; line-height: 1;
+            transition: transform .1s;
         }
+        .fav-remove-btn:hover { transform: scale(1.15); }
+        .fav-remove-btn svg { width: 11px; height: 11px; }
+        .editing-mode .fav-remove-btn { display: flex; }
+        .editing-mode .fav-card { cursor: default; border-style: dashed; }
+
+        .fav-icon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; margin-bottom: 13px; flex-shrink: 0; }
+        .fav-icon svg { width: 20px; height: 20px; }
+        .fav-name { font-size: .82rem; font-weight: 700; color: #1e293b; margin-bottom: 5px; line-height: 1.3; }
+        .fav-desc { font-size: .7rem; color: #64748b; line-height: 1.5; flex: 1; margin-bottom: 13px; }
+        .fav-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            padding: 7px 13px; border-radius: 8px;
+            font-size: .72rem; font-weight: 600;
+            text-decoration: none; border: none; cursor: pointer;
+            transition: filter .15s;
+            pointer-events: none;
+        }
+        .fav-card:not(.editing-mode):hover .fav-btn { filter: brightness(1.08); }
+        .fav-btn svg { width: 11px; height: 11px; }
+
+        .fav-empty {
+            flex: 0 0 200px; background: #f8fafc; border: 2px dashed #e2e8f0;
+            border-radius: 14px; padding: 24px 18px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 8px; color: #94a3b8; font-size: .78rem; text-align: center;
+        }
+        .fav-empty svg { width: 24px; height: 24px; opacity: .4; }
+
+        /* ── Section accordion ── */
+        .sec-group { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+        .sec-toggle { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; background: none; border: none; border-bottom: 1px solid transparent; text-align: left; transition: background .12s; }
+        .sec-toggle:hover { background: #f8fafc; }
+        .sec-open .sec-toggle { border-bottom-color: #e8edf5; }
+        .sec-dot { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .sec-dot svg { width: 18px; height: 18px; }
+        .sec-meta { flex: 1; min-width: 0; }
+        .sec-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+        .sec-name { font-size: .95rem; font-weight: 700; color: #1e293b; }
+        .sec-pill { font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+        .chevron { width: 16px; height: 16px; flex-shrink: 0; color: #94a3b8; transition: transform .25s cubic-bezier(.4,0,.2,1); }
+        .chevron svg { width: 16px; height: 16px; }
+        .sec-open .chevron { transform: rotate(180deg); }
+        .sec-body { display: none; padding: 18px; }
+        .sec-open .sec-body { display: block; }
+
+        /* ── Tool cards ── */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+        .tool-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px 24px 22px; display: flex; flex-direction: column; transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s; position: relative; }
+        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -8px rgba(0,0,0,.12); }
+        .tool-card.dis { opacity: .38; pointer-events: none; }
+        .tc-icon { width: 54px; height: 54px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; flex-shrink: 0; }
+        .tc-icon svg { width: 26px; height: 26px; }
+        .tc-name { font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 8px; line-height: 1.3; }
+        .tc-desc { font-size: .85rem; color: #64748b; line-height: 1.6; flex: 1; margin-bottom: 18px; }
+        .tc-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 18px; border-radius: 10px; font-size: .82rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: filter .15s, transform .1s; }
+        .tc-btn:hover { filter: brightness(1.08); }
+        .tc-btn:active { transform: scale(.97); }
+        .tc-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+        /* Add-to-fav button on tool card */
+        .fav-toggle-btn {
+            position: absolute; top: 12px; right: 12px;
+            background: none; border: none; cursor: pointer;
+            padding: 4px; border-radius: 6px;
+            color: #cbd5e1; transition: color .15s, transform .15s;
+        }
+        .fav-toggle-btn:hover { color: #f59e0b; transform: scale(1.2); }
+        .fav-toggle-btn.is-fav { color: #f59e0b; }
+        .fav-toggle-btn svg { width: 18px; height: 18px; }
+
+        /* ── Section color themes ── */
+        .s-blue .sec-dot  { background:#eff6ff; color:#2563eb; } .s-blue .sec-label { color:#3b82f6; } .s-blue .sec-pill { background:#eff6ff; color:#2563eb; } .s-blue .tc-icon, .s-blue .fav-icon { background:#eff6ff; color:#2563eb; } .s-blue .tc-btn, .s-blue .fav-btn { background:#2563eb; color:#fff; }
+        .s-violet .sec-dot { background:#f5f3ff; color:#7c3aed; } .s-violet .sec-label { color:#7c3aed; } .s-violet .sec-pill { background:#f5f3ff; color:#7c3aed; } .s-violet .tc-icon, .s-violet .fav-icon { background:#f5f3ff; color:#7c3aed; } .s-violet .tc-btn, .s-violet .fav-btn { background:#7c3aed; color:#fff; }
+        .s-green .sec-dot  { background:#f0fdf4; color:#16a34a; } .s-green .sec-label { color:#16a34a; } .s-green .sec-pill { background:#f0fdf4; color:#16a34a; } .s-green .tc-icon, .s-green .fav-icon { background:#f0fdf4; color:#16a34a; } .s-green .tc-btn, .s-green .fav-btn { background:#16a34a; color:#fff; }
+        .s-amber .sec-dot  { background:#fffbeb; color:#d97706; } .s-amber .sec-label { color:#d97706; } .s-amber .sec-pill { background:#fffbeb; color:#d97706; } .s-amber .tc-icon, .s-amber .fav-icon { background:#fffbeb; color:#d97706; } .s-amber .tc-btn, .s-amber .fav-btn { background:#d97706; color:#fff; }
+        .s-rose .sec-dot   { background:#fff1f2; color:#e11d48; } .s-rose .sec-label  { color:#e11d48; } .s-rose .sec-pill  { background:#fff1f2; color:#e11d48; } .s-rose .tc-icon, .s-rose .fav-icon  { background:#fff1f2; color:#e11d48; } .s-rose .tc-btn, .s-rose .fav-btn  { background:#e11d48; color:#fff; }
+
+        footer { background:#fff; border-top:1px solid #e2e8f0; padding:28px; font-size:.82rem; color:#94a3b8; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:12px; }
+        footer a { color:#94a3b8; text-decoration:none; transition:color .15s; }
+        footer a:hover { color:#475569; }
+
+        @media(max-width:640px){ main{padding:28px 16px 36px;} .tab-list{padding:0 12px;} .tab-btn{padding:14px 12px; font-size:.8rem;} header{padding:36px 20px;} .fav-card{flex:0 0 170px;} }
+        @media(max-width:420px){ .tools-grid{grid-template-columns:1fr;} }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-    <!-- Header / Hero Section -->
-    <header class="gradient-bg text-white py-12 px-6 shadow-lg">
-        <div class="max-w-6xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-                Herramientas de Supervisión
-            </h1>
-            <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto font-light">
-                Panel centralizado por proyecto para la gestión operativa del equipo supervisor.
-            </p>
-        </div>
-    </header>
+<header>
+    <h1>Herramientas de Supervisión</h1>
+    <p>Panel centralizado por proyecto para la gestión operativa del equipo supervisor.</p>
+</header>
 
-    <!-- Project Navigation Tabs -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-10 overflow-x-auto">
-        <div class="max-w-6xl mx-auto px-6">
-            <ul class="flex space-x-8 text-sm font-medium text-slate-500 whitespace-nowrap">
-                <li><button onclick="showProject('numu')" id="btn-numu" class="py-4 px-2 tab-btn">1. PS Numu</button></li>
-                <li><button onclick="showProject('tecales')" id="btn-tecales" class="py-4 px-2 tab-btn tab-active">2. PS Los Tecales</button></li>
-                <li><button onclick="showProject('canas')" id="btn-canas" class="py-4 px-2 tab-btn">3. PS Cañas</button></li>
-                <li><button onclick="showProject('inolasa')" id="btn-inolasa" class="py-4 px-2 tab-btn">4. Inolasa</button></li>
-                <li><button onclick="showProject('boston')" id="btn-boston" class="py-4 px-2 tab-btn">5. Boston Sc.</button></li>
-                <li><button onclick="showProject('colorado')" id="btn-colorado" class="py-4 px-2 tab-btn">6. Colorado</button></li>
-            </ul>
-        </div>
-    </nav>
+<nav>
+    <div class="tab-list">
+        <button onclick="go('numu')"     id="btn-numu"     class="tab-btn">1. PS Numu</button>
+        <button onclick="go('tecales')"  id="btn-tecales"  class="tab-btn">2. PS Los Tecales</button>
+        <button onclick="go('canas')"    id="btn-canas"    class="tab-btn">3. PS Cañas</button>
+        <button onclick="go('inolasa')"  id="btn-inolasa"  class="tab-btn">4. Inolasa</button>
+        <button onclick="go('boston')"   id="btn-boston"   class="tab-btn">5. Boston Sc.</button>
+        <button onclick="go('colorado')" id="btn-colorado" class="tab-btn">6. Colorado</button>
+    </div>
+</nav>
 
-    <!-- Main Content -->
-    <main class="flex-grow py-12 px-6">
-        <div class="max-w-6xl mx-auto">
-            
-            <h2 id="project-title" class="text-3xl font-bold text-slate-800 mb-8">2. PS Los Tecales</h2>
+<main>
+    <h2 id="project-title"></h2>
 
-            <div id="tools-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- El contenido se genera dinámicamente con JavaScript -->
+    <!-- Favorites carousel -->
+    <div class="fav-section">
+        <div class="fav-header">
+            <div class="fav-title">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Favoritos
             </div>
+            <button class="fav-edit-btn" id="fav-edit-btn" onclick="toggleEdit()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Editar
+            </button>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-8 px-6 mt-12">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
-            <p>&copy; 2026 Equipo de Supervisión. Todos los derechos reservados.</p>
-            <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="https://github.com/registrodeinformesdiarios-svg/registrodeinformesdiarios-svg.github.io/blob/main/Manual%20de%20usuario.pdf" class="hover:text-slate-800 transition-colors">Manual de Usuario</a>
-                <a href="https://github.com/registrodeinformesdiarios-svg/registrodeinformesdiarios-svg.github.io/blob/main/Manual%20de%20usuario.pdf" class="hover:text-slate-800 transition-colors">Soporte Técnico</a>
-            </div>
+        <div class="fav-track-wrap">
+            <div class="fav-track" id="fav-track"></div>
         </div>
-    </footer>
+    </div>
 
-    <script>
-        // Configuración de proyectos y sus enlaces
-        const projects = {
-            'numu': {
-                title: '1. PS Numu',
-                form: '#',
-                watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Numu',
-                reports: '#',
-                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Numu',
-                kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Numu&carpetaId=PorDefinir',
-                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
-                gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'
-            },
-            'tecales': {
-                title: '2. PS Los Tecales',
-                form: 'https://docs.google.com/forms/d/e/1FAIpQLScnnyrYdjsp68DlC6RQa5v2ovD3as3yGlasiKuPUOb_ogXuLQ/viewform',
-                watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Los+Tecales',
-                reports: 'https://registrodeinformesdiarios-svg.github.io/ReportGenerator/',
-                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Los+Tecales',
-                kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Los+Tecales&carpetaId=1Sox86IWQ6IoAWDUxmc_EOhvGrXGRve0eHbWZ7M545f26jVmCrWe58QiWoCs-VfPkan0oB2Zf',
-                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
-                gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'
-            },
-            'canas': {
-                title: '3. PS Cañas',
-                form: '#',
-                watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Las+Cañas',
-                reports: '#',
-                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Las+Cañas',
-                kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Las+Cañas&carpetaId=PorDefinir',
-                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
-                gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'
-            },
-            'inolasa': {
-                title: '4. Inolasa',
-                form: '#',
-                watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=Inolasa',
-                reports: '#',
-                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=Inolasa',
-                kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=Inolasa&carpetaId=PorDefinir',
-                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
-                gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'
-            },
-            'boston': {
-                title: '5. Boston Sc.',
-                form: '#',
-                watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=Bostor+Sc',
-                reports: '#',
-                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=Boston+Sc',
-                kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=Bostor+Sc&carpetaId=PorDefinir',
-                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
-                gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'
-            },
-            'colorado': {
-                title: '6. Colorado',
-                form: '#',
-                watermark: 'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Colorado',
-                reports: '#',
-                curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Colorado',
-                kilometraje: '#',
-                viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-                visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
-                visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Colorado&carpetaId=PorDefinir',
-                generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
-                gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'
-            }
-        };
+    <div id="wrap"></div>
+</main>
 
-        function showProject(projectId) {
-            const project = projects[projectId];
-            document.getElementById('project-title').innerText = project.title;
-            
-            // Actualizar botones de navegación
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
-            document.getElementById('btn-' + projectId).classList.add('tab-active');
+<footer>
+    <span>© 2026 Equipo de Supervisión. Todos los derechos reservados.</span>
+    <div style="display:flex;gap:24px;">
+        <a href="https://github.com/registrodeinformesdiarios-svg/registrodeinformesdiarios-svg.github.io/blob/main/Manual%20de%20usuario.pdf">Manual de Usuario</a>
+        <a href="https://github.com/registrodeinformesdiarios-svg/registrodeinformesdiarios-svg.github.io/blob/main/Manual%20de%20usuario.pdf">Soporte Técnico</a>
+    </div>
+</footer>
 
-            const container = document.getElementById('tools-container');
-            container.innerHTML = `
-                <!-- Formulario -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="clipboard-list" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Formulario de Reporte</h2>
-                    <p class="text-slate-600 mb-8 flex-grow">Acceso directo al formulario oficial de Google para la recopilación de datos de campo en ${project.title}.</p>
-                    <a href="${project.form}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        Abrir Formulario <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+<script>
+const P={
+    numu:{title:'1. PS Numu',form:'#',watermark:'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Numu',reports:'#',curveS:'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Numu',kilometraje:'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',viaticos:'https://registrodeinformesdiarios-svg.github.io/viaticos/',visualizador3D:'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',visualizadorFotos:'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Numu&carpetaId=PorDefinir',generadorPresentaciones:'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',gestorDePlanos:'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'},
+    tecales:{title:'2. PS Los Tecales',form:'https://docs.google.com/forms/d/e/1FAIpQLScnnyrYdjsp68DlC6RQa5v2ovD3as3yGlasiKuPUOb_ogXuLQ/viewform',watermark:'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Los+Tecales',reports:'https://registrodeinformesdiarios-svg.github.io/ReportGenerator/',curveS:'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Los+Tecales',kilometraje:'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',viaticos:'https://registrodeinformesdiarios-svg.github.io/viaticos/',visualizador3D:'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',visualizadorFotos:'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Los+Tecales&carpetaId=1Sox86IWQ6IoAWDUxmc_EOhvGrXGRve0eHbWZ7M545f26jVmCrWe58QiWoCs-VfPkan0oB2Zf',generadorPresentaciones:'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',gestorDePlanos:'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'},
+    canas:{title:'3. PS Cañas',form:'#',watermark:'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Las+Cañas',reports:'#',curveS:'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Las+Cañas',kilometraje:'#',viaticos:'https://registrodeinformesdiarios-svg.github.io/viaticos/',visualizador3D:'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',visualizadorFotos:'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Las+Cañas&carpetaId=PorDefinir',generadorPresentaciones:'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',gestorDePlanos:'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'},
+    inolasa:{title:'4. Inolasa',form:'#',watermark:'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=Inolasa',reports:'#',curveS:'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=Inolasa',kilometraje:'#',viaticos:'https://registrodeinformesdiarios-svg.github.io/viaticos/',visualizador3D:'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',visualizadorFotos:'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=Inolasa&carpetaId=PorDefinir',generadorPresentaciones:'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',gestorDePlanos:'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'},
+    boston:{title:'5. Boston Sc.',form:'#',watermark:'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=Bostor+Sc',reports:'#',curveS:'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=Boston+Sc',kilometraje:'#',viaticos:'https://registrodeinformesdiarios-svg.github.io/viaticos/',visualizador3D:'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',visualizadorFotos:'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=Bostor+Sc&carpetaId=PorDefinir',generadorPresentaciones:'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',gestorDePlanos:'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'},
+    colorado:{title:'6. Colorado',form:'#',watermark:'https://registrodeinformesdiarios-svg.github.io/marcas-agua-supervision/?proyecto=PS+Colorado',reports:'#',curveS:'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Colorado',kilometraje:'#',viaticos:'https://registrodeinformesdiarios-svg.github.io/viaticos/',visualizador3D:'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',visualizadorFotos:'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Colorado&carpetaId=PorDefinir',generadorPresentaciones:'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',gestorDePlanos:'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/'}
+};
 
-                <!-- Marcas de Agua -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-600 rounded-xl">
-                        <i data-lucide="image" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Subir fotos con marca</h2>
-                    <p class="text-slate-600 mb-8 flex-grow">Subir fotografías y aplicar marca de agua de supervisión para el proyecto ${project.title}.</p>
-                    <a href="${project.watermark}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
-                        Acceder <i data-lucide="camera" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+const I={
+    form:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg>`,
+    stamp:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/><line x1="12" y1="11" x2="12" y2="9"/><polyline points="10 10 12 8 14 10"/></svg>`,
+    trend:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+    file:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+    car:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l2-3h8l2 3h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2z"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>`,
+    wallet:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg>`,
+    box:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
+    img:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+    slides:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20v14H2z"/><path d="M12 17v4M8 21h8"/></svg>`,
+    layers:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+    chev:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
+    ext:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+    star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    starFill:`<svg viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    minus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+};
 
-                <!-- Generador de Informes -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-amber-50 text-amber-600 rounded-xl">
-                        <i data-lucide="file-text" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Informes periodicos</h2>
-                    <p class="text-slate-600 mb-8 flex-grow">Generador automático de informes técnicos y operativos para ${project.title}.</p>
-                    <a href="${project.reports}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-amber-600 hover:bg-amber-700 transition-colors">
-                        Generar Informe <i data-lucide="file-plus" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+// Default favorites (tool IDs)
+const DEFAULT_FAVS = ['watermark','visualizadorFotos','curveS','viaticos'];
+const LS_KEY = 'svgpanel_favorites';
 
-                <!-- Curva S -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="trending-up" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Curva S</h2>
-                    <p class="text-slate-600 mb-8 flex-grow">Sistema de seguimiento de progreso de proyecto según cronograma para ${project.title}.</p>
-                    <a href="${project.curveS}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        Abrir sistema de seguimiento <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+function loadFavs() {
+    try {
+        const s = localStorage.getItem(LS_KEY);
+        return s ? JSON.parse(s) : [...DEFAULT_FAVS];
+    } catch(e) { return [...DEFAULT_FAVS]; }
+}
+function saveFavs(f) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(f)); } catch(e){}
+}
 
-                <!-- Kilometraje -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-600 rounded-xl">
-                        <i data-lucide="car" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Kilometraje</h2>
-                    <p class="text-slate-600 mb-8 flex-grow">Formulario para ingresar kilometraje en proyecto ${project.title}.</p>
-                    <a href="${project.kilometraje}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
-                        Registrar cierre de día <i data-lucide="plus-circle" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+let favs = loadFavs();
+let isEditing = false;
+let currentProject = 'tecales';
 
-                <!-- Viaticos -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm">
-                      <div class="mb-6 flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-600 rounded-xl">
-                            <i data-lucide="wallet" class="w-8 h-8"></i>
-                      </div>
-                      <h2 class="text-2xl font-bold text-slate-800 mb-3">Viáticos</h2>
-                      <p class="text-slate-600 mb-8 flex-grow">Formulario para ingresar viáticos en proyecto ${project.title}.</p>
-                      <a href="${project.viaticos}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
-                        Registrar gastos
-                        <i data-lucide="plus-circle" class="ml-2 w-4 h-4"></i>
-                      </a>
-                </div>
+function allTools(p) {
+    return [
+        {id:'form',           name:'Formulario de reporte',       desc:'Datos de campo vía Google Forms.',                              icon:I.form,   color:'s-blue',   btn:'Abrir formulario',    url:p.form},
+        {id:'watermark',      name:'Subir fotos con marca',       desc:'Aplica marca de agua de supervisión.',                          icon:I.stamp,  color:'s-blue',   btn:'Acceder',             url:p.watermark},
+        {id:'curveS',         name:'Curva S',                     desc:'Progreso del proyecto vs. cronograma.',                         icon:I.trend,  color:'s-violet', btn:'Abrir seguimiento',   url:p.curveS},
+        {id:'reports',        name:'Informes periódicos',         desc:'Generador automático de informes.',                             icon:I.file,   color:'s-violet', btn:'Generar informe',     url:p.reports},
+        {id:'kilometraje',    name:'Kilometraje',                 desc:'Registro de kilometraje y cierre de día.',                      icon:I.car,    color:'s-green',  btn:'Registrar cierre',    url:p.kilometraje},
+        {id:'viaticos',       name:'Viáticos',                    desc:'Control de gastos de viático.',                                 icon:I.wallet, color:'s-green',  btn:'Registrar gastos',    url:p.viaticos},
+        {id:'visualizador3D', name:'Visualizador 3D',             desc:'Modelo tridimensional interactivo.',                            icon:I.box,    color:'s-amber',  btn:'Explorar modelo',     url:p.visualizador3D},
+        {id:'visualizadorFotos',name:'Galería de fotos',          desc:'Imágenes en alta resolución.',                                  icon:I.img,    color:'s-amber',  btn:'Ver galería',         url:p.visualizadorFotos},
+        {id:'generadorPresentaciones',name:'Generador de presentaciones',desc:'Presentaciones automáticas de fotos.',                   icon:I.slides, color:'s-rose',   btn:'Comenzar generación', url:p.generadorPresentaciones},
+        {id:'gestorDePlanos', name:'Gestor de planos técnicos',   desc:'Planimetría, alzados y detalles técnicos.',                     icon:I.layers, color:'s-rose',   btn:'Ver planos',          url:p.gestorDePlanos},
+    ];
+}
 
-                <!-- Vizualizador3D -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="box" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Visualizador 3D</h2>   
-                    <p class="text-slate-600 mb-8 flex-grow">
-                        Explora e interactúa con el modelo tridimensional detallado de ${project.title} en tiempo real.
-                    </p>   
-                    <a href="${project.visualizador3D}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        Explorar Modelo <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+function getSections(p) {
+    const t = allTools(p);
+    const byId = {};
+    t.forEach(x => byId[x.id] = x);
+    return [
+        {id:'reg',   color:'s-blue',   label:'Trabajo de campo',      name:'Registro diario',          icon:I.form,   tools:[byId.form, byId.watermark]},
+        {id:'seg',   color:'s-violet', label:'Avance del proyecto',   name:'Seguimiento y reportes',   icon:I.trend,  tools:[byId.curveS, byId.reports]},
+        {id:'gas',   color:'s-green',  label:'Control de costos',     name:'Gastos y movilización',    icon:I.wallet, tools:[byId.kilometraje, byId.viaticos]},
+        {id:'vis',   color:'s-amber',  label:'Exploración visual',    name:'Visualización',            icon:I.box,    tools:[byId.visualizador3D, byId.visualizadorFotos]},
+        {id:'doc',   color:'s-rose',   label:'Documentación técnica', name:'Documentos y planos',      icon:I.layers, tools:[byId.generadorPresentaciones, byId.gestorDePlanos]},
+    ];
+}
 
-                <!-- VizualizadorFotos -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="image" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Visualizador de Fotos</h2>   
-                    <p class="text-slate-600 mb-8 flex-grow">
-                        Explora la galería completa de imágenes y fotografías detalladas de ${project.title} en alta resolución.
-                    </p>   
-                    <a href="${project.visualizadorFotos}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        Ver Galería <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+// ── Favorites carousel ────────────────────────────────────────
+function renderFavs() {
+    const p = P[currentProject];
+    const tools = allTools(p);
+    const byId = {};
+    tools.forEach(x => byId[x.id] = x);
 
-                <!-- Generador de presentaciones -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="presentation" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Generador de presentaciones</h2>   
-                    <p class="text-slate-600 mb-8 flex-grow">
-                        Explora automaticamente la galería completa de imágenes y fotografías para generar presentaciones de forma automatizada para ${project.title}.
-                    </p>   
-                    <a href="${project.generadorPresentaciones}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        Comenzar Generación <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
+    const track = document.getElementById('fav-track');
+    const editBtn = document.getElementById('fav-edit-btn');
 
-                <!-- Gestor de planos -->
-                <div class="tool-card bg-white rounded-2xl p-8 border border-slate-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
-                    <div class="mb-6 flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="layers" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Gestor de planos técnicos</h2>   
-                    <p class="text-slate-600 mb-8 flex-grow">
-                        Accede y gestiona la planimetría completa de <strong>${project.title}</strong>. Visualiza versiones actualizadas, alzados y detalles técnicos en un solo lugar.
-                    </p>   
-                    <a href="${project.gestorDePlanos}" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        Ver Planos <i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
-                    </a>
-                </div>
-            `;
-            
-            lucide.createIcons();
-        }
+    if (isEditing) {
+        editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Listo`;
+        editBtn.classList.add('editing');
+    } else {
+        editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar`;
+        editBtn.classList.remove('editing');
+    }
 
-        // Cargar proyecto por defecto (Tecales)
-        window.onload = () => showProject('tecales');
-    </script>
+    if (favs.length === 0) {
+        track.innerHTML = `<div class="fav-empty">${I.star}<span>Sin favoritos.<br>Agrega con ★ en las tarjetas.</span></div>`;
+        return;
+    }
+
+    track.innerHTML = favs.map(id => {
+        const t = byId[id];
+        if (!t) return '';
+        const d = !t.url || t.url === '#';
+        return `
+        <div class="fav-card ${t.color} ${isEditing ? 'fav-editing' : ''}" ${d||isEditing ? '' : `onclick="window.open('${t.url}','_blank')" style="cursor:pointer"`}>
+            ${isEditing ? `<button class="fav-remove-btn" onclick="event.stopPropagation();removeFav('${id}')" title="Quitar de favoritos">${I.minus}</button>` : ''}
+            <div class="fav-icon">${t.icon}</div>
+            <div class="fav-name">${t.name}</div>
+            <div class="fav-desc">${t.desc}</div>
+            <div class="fav-btn">${t.btn} ${I.ext}</div>
+        </div>`;
+    }).join('');
+}
+
+function removeFav(id) {
+    favs = favs.filter(f => f !== id);
+    saveFavs(favs);
+    renderFavs();
+    renderSections(); // refresh star states
+}
+
+function toggleFav(id) {
+    if (favs.includes(id)) {
+        favs = favs.filter(f => f !== id);
+    } else {
+        favs.push(id);
+    }
+    saveFavs(favs);
+    renderFavs();
+    renderSections();
+}
+
+function toggleEdit() {
+    isEditing = !isEditing;
+    renderFavs();
+}
+
+// ── Sections ──────────────────────────────────────────────────
+function tCard(t) {
+    const d = !t.url || t.url === '#';
+    const isFav = favs.includes(t.id);
+    return `<div class="tool-card ${t.color} ${d ? 'dis' : ''}">
+        <button class="fav-toggle-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav('${t.id}')" title="${isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}">
+            ${isFav ? I.starFill : I.star}
+        </button>
+        <div class="tc-icon">${t.icon}</div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-desc">${t.desc}</div>
+        <a href="${d ? '#' : t.url}" ${d ? '' : 'target="_blank"'} class="tc-btn">${t.btn} ${I.ext}</a>
+    </div>`;
+}
+
+function renderSections() {
+    const p = P[currentProject];
+    document.getElementById('wrap').innerHTML = getSections(p).map(s => `
+    <div class="sec-group ${s.color}" id="s-${s.id}">
+        <button class="sec-toggle" onclick="tog('${s.id}')">
+            <div class="sec-dot">${s.icon}</div>
+            <div class="sec-meta"><div class="sec-label">${s.label}</div><div class="sec-name">${s.name}</div></div>
+            <span class="sec-pill">${s.tools.length} herramientas</span>
+            <div class="chevron">${I.chev}</div>
+        </button>
+        <div class="sec-body"><div class="tools-grid">${s.tools.map(tCard).join('')}</div></div>
+    </div>`).join('');
+}
+
+function tog(id) {
+    document.getElementById('s-' + id).classList.toggle('sec-open');
+}
+
+function go(id) {
+    currentProject = id;
+    document.getElementById('project-title').textContent = P[id].title;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+    document.getElementById('btn-' + id).classList.add('tab-active');
+    renderFavs();
+    renderSections();
+}
+
+window.onload = () => go('tecales');
+</script>
 </body>
 </html>
