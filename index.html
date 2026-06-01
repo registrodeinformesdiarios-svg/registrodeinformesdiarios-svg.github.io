@@ -146,7 +146,7 @@
         .tc-btn:active { transform: scale(.97); }
         .tc-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-        /* Add-to-fav button on tool card */
+        .tc-content { display: contents; } /* desktop: transparent wrapper, children flow normally */
         .fav-toggle-btn {
             position: absolute; top: 12px; right: 12px;
             background: none; border: none; cursor: pointer;
@@ -168,8 +168,84 @@
         footer a { color:#94a3b8; text-decoration:none; transition:color .15s; }
         footer a:hover { color:#475569; }
 
-        @media(max-width:640px){ main{padding:28px 16px 36px;} .tab-list{padding:0 12px;} .tab-btn{padding:14px 12px; font-size:.8rem;} header{padding:36px 20px;} .fav-card{flex:0 0 170px;} }
-        @media(max-width:420px){ .tools-grid{grid-template-columns:1fr;} }
+        /* ── Tablet portrait ── */
+        @media (max-width: 768px) {
+            header { padding: 36px 20px; }
+            header h1 { font-size: 1.9rem; }
+            header p { font-size: .95rem; }
+            main { padding: 24px 16px 40px; }
+            #project-title { font-size: 1.4rem; margin-bottom: 18px; }
+            .tab-list { padding: 0 12px; }
+            .tab-btn { padding: 14px 12px; font-size: .8rem; }
+            .tools-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+            .fav-card { flex: 0 0 180px; }
+        }
+
+        /* ── Mobile portrait (≤480px) — main breakpoint ── */
+        @media (max-width: 480px), (max-width: 600px) and (orientation: portrait) {
+            /* Header compacto */
+            header { padding: 28px 16px 24px; }
+            header h1 { font-size: 1.45rem; margin-bottom: 8px; }
+            header p { font-size: .82rem; line-height: 1.5; }
+
+            /* Nav: tabs más pequeños, scroll suave */
+            .tab-list { padding: 0 8px; gap: 0; }
+            .tab-btn { font-size: .72rem; padding: 12px 9px; letter-spacing: 0; }
+
+            /* Main */
+            main { padding: 18px 12px 32px; }
+            #project-title { font-size: 1.15rem; margin-bottom: 14px; }
+
+            /* Favoritos: tarjetas más angostas */
+            .fav-section { margin-bottom: 22px; }
+            .fav-header { margin-bottom: 10px; }
+            .fav-card { flex: 0 0 155px; padding: 15px 13px 13px; border-radius: 12px; }
+            .fav-icon { width: 36px; height: 36px; border-radius: 9px; margin-bottom: 10px; }
+            .fav-icon svg { width: 17px; height: 17px; }
+            .fav-name { font-size: .75rem; margin-bottom: 4px; }
+            .fav-desc { font-size: .65rem; margin-bottom: 10px; line-height: 1.4; }
+            .fav-btn { font-size: .65rem; padding: 6px 10px; }
+
+            /* Secciones */
+            .sec-toggle { padding: 13px 14px; gap: 11px; }
+            .sec-dot { width: 30px; height: 30px; border-radius: 7px; }
+            .sec-dot svg { width: 15px; height: 15px; }
+            .sec-name { font-size: .85rem; }
+            .sec-label { font-size: .58rem; }
+            .sec-pill { font-size: .62rem; padding: 2px 7px; }
+            .sec-body { padding: 12px; }
+
+            /* Tool cards: 1 columna, layout horizontal compacto */
+            .tools-grid { grid-template-columns: 1fr; gap: 10px; }
+            .tool-card {
+                padding: 16px 16px 14px;
+                border-radius: 12px;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 14px;
+            }
+            .tool-card:hover { transform: translateY(-2px); }
+            .tc-icon { width: 42px; height: 42px; border-radius: 10px; margin-bottom: 0; flex-shrink: 0; }
+            .tc-icon svg { width: 20px; height: 20px; }
+            .tc-content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+            .tc-name { font-size: .88rem; margin-bottom: 4px; }
+            .tc-desc { font-size: .72rem; margin-bottom: 10px; line-height: 1.45; }
+            .tc-btn { font-size: .72rem; padding: 8px 13px; align-self: flex-start; }
+            .tc-btn svg { width: 12px; height: 12px; }
+            .fav-toggle-btn { top: 10px; right: 10px; }
+            .fav-toggle-btn svg { width: 16px; height: 16px; }
+
+            /* Footer */
+            footer { padding: 18px 16px; flex-direction: column; text-align: center; gap: 8px; }
+        }
+
+        /* ── Pequeño (≤360px) ── */
+        @media (max-width: 360px) {
+            header h1 { font-size: 1.25rem; }
+            .tab-btn { font-size: .67rem; padding: 11px 7px; }
+            .fav-card { flex: 0 0 140px; }
+            .tc-name { font-size: .82rem; }
+        }
     </style>
 </head>
 <body>
@@ -365,9 +441,11 @@ function tCard(t) {
             ${isFav ? I.starFill : I.star}
         </button>
         <div class="tc-icon">${t.icon}</div>
-        <div class="tc-name">${t.name}</div>
-        <div class="tc-desc">${t.desc}</div>
-        <a href="${d ? '#' : t.url}" ${d ? '' : 'target="_blank"'} class="tc-btn">${t.btn} ${I.ext}</a>
+        <div class="tc-content">
+            <div class="tc-name">${t.name}</div>
+            <div class="tc-desc">${t.desc}</div>
+            <a href="${d ? '#' : t.url}" ${d ? '' : 'target="_blank"'} class="tc-btn">${t.btn} ${I.ext}</a>
+        </div>
     </div>`;
 }
 
