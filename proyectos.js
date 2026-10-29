@@ -111,7 +111,7 @@ const PROYECTOS = [
         curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Colorado',
         kilometraje: '#',
         viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-        visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
+        visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/subestacion-explorer.html?m=1mmkfgkqaVZdSbW7RosABce2LLnufhgHO&s=https://script.google.com/macros/s/AKfycbz9XBhQ0LKCsDxyanM0S7otTlEMuK1MOLcsXoE0w9zBE5_bSNIIAThEWFZoJfrcXiXE/exec',
         visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Colorado&carpetaId=13u0tmrcQY6u_0wOtlrT8oSTmtrpdpvKj',
         generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
         gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/',
