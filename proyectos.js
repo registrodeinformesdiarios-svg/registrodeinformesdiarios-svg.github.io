@@ -26,7 +26,7 @@ const PROYECTOS = [
         curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=PS+Numu',
         kilometraje: 'https://docs.google.com/forms/d/e/1FAIpQLSfG9wMSAEXpbI4jzXTq24nWrLYi1wRwZPy2CC6GE5M-kf-2-w/viewform',
         viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-        visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
+        visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/subestacion-explorer.html?p=1bk4kyzxlbmE09DlhOpu3urHuCyVASF_0&s=https%3A%2F%2Fscript.google.com%2Fmacros%2Fs%2FAKfycbz9XBhQ0LKCsDxyanM0S7otTlEMuK1MOLcsXoE0w9zBE5_bSNIIAThEWFZoJfrcXiXE%2Fexec',
         visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=PS+Numu&carpetaId=1qhfoK8UYyZ2WQjPjjSGS0IiHI5f4_Kq5',
         generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
         gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/',
