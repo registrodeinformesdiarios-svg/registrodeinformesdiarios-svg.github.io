@@ -128,7 +128,7 @@ const PROYECTOS = [
         curveS: 'https://registrodeinformesdiarios-svg.github.io/CurvaS?project=Vicesa',
         kilometraje: '#',
         viaticos: 'https://registrodeinformesdiarios-svg.github.io/viaticos/',
-        visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/',
+        visualizador3D: 'https://registrodeinformesdiarios-svg.github.io/visualizador3D/subestacion-explorer.html?p=1UAUIMauODYk56Arw0cSjfkXfixF8Ce34&s=https%3A%2F%2Fscript.google.com%2Fmacros%2Fs%2FAKfycbz9XBhQ0LKCsDxyanM0S7otTlEMuK1MOLcsXoE0w9zBE5_bSNIIAThEWFZoJfrcXiXE%2Fexec',
         visualizadorFotos: 'https://registrodeinformesdiarios-svg.github.io/visualizadorFotos/?proyecto=Vicesa&carpetaId=PorDefinir',
         generadorPresentaciones: 'https://registrodeinformesdiarios-svg.github.io/GeneradorPresentaciones/',
         gestorDePlanos: 'https://registrodeinformesdiarios-svg.github.io/GestorPlanos/',
